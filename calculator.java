@@ -9,6 +9,7 @@ public class calculator {
     private static String currentEntry;
     private static String currentOperator;
     private static boolean pressedEnter;
+    private static JLabel text;
     private static ArrayList<JButton> buttons;
 
     private static boolean isNumber(String s) {
@@ -33,7 +34,6 @@ public class calculator {
     public static void handleEvent(ActionEvent event) {
         JButton button = (JButton)event.getSource();
         String buttonName = button.getText();
-
         if (buttonName.equals("CE")) {
             if (currentEntry.equals("0")) {
                 totalString = "0";
@@ -43,8 +43,10 @@ public class calculator {
         } else if (isNumber(buttonName)) {
             if (pressedEnter) {
                 totalString += buttonName;
+                text.setText(totalString);
             } else {
                 currentEntry += buttonName;
+                text.setText(currentEntry);
             }
         } else if (buttonName.equals("=")) {
             double tempTotal;
@@ -66,6 +68,7 @@ public class calculator {
                 case "*": totalString = Double.toString((double)(tempTotal * tempCurrentEntry)); break;
                 case "/": totalString = Double.toString((double)(tempTotal / tempCurrentEntry)); break; // I don't understand
             }
+            text.setText(totalString);
             currentOperator = "";
             currentEntry = "0";
             pressedEnter = true;
@@ -73,7 +76,7 @@ public class calculator {
             currentOperator = buttonName;
             pressedEnter = false;
         } 
-        System.out.println(totalString);
+        //TODO: doing something like 9, +, 3, =, 3, +, 3 doesn't work
     }
 
     public static void addEventListenerToButtons() {
@@ -106,7 +109,6 @@ public class calculator {
         addButton(pane, "/", 3, 4);
 
         GridBagConstraints constraints = new GridBagConstraints();
-        JLabel text = new JLabel("placeholder!", null, 0);
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 3;
@@ -129,6 +131,7 @@ public class calculator {
         currentOperator = "";
         pressedEnter = true;
         buttons = new ArrayList<JButton>();
+        text = new JLabel("0");
         createWindow();
         // TODO: add text to text box
     }
