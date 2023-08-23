@@ -8,7 +8,7 @@ public class calculator {
     private static String totalString;
     private static String currentEntry;
     private static String currentOperator;
-    private static boolean pressedEnter;
+    private static boolean pressedEquals;
     private static JLabel text;
     private static ArrayList<JButton> buttons;
 
@@ -27,6 +27,7 @@ public class calculator {
         constraints.gridx = x;
         constraints.gridy = y;
         constraints.ipadx = 20;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
         pane.add(button, constraints);
         buttons.add(button);
     }
@@ -35,13 +36,15 @@ public class calculator {
         JButton button = (JButton)event.getSource();
         String buttonName = button.getText();
         if (buttonName.equals("CE")) {
-            if (currentEntry.equals("0")) {
-                totalString = "0";
+            if (currentEntry.equals("")) {
+                totalString = "";
+                text.setText("0");
             } else {
-                currentEntry = "0";
+                currentEntry = "";
+                text.setText("0");
             }
         } else if (isNumber(buttonName)) {
-            if (pressedEnter) {
+            if (pressedEquals) {
                 totalString += buttonName;
                 text.setText(totalString);
             } else {
@@ -63,20 +66,19 @@ public class calculator {
                 tempTotal = Double.parseDouble(totalString);
             }
             switch (currentOperator) {
-                case "+": totalString = Double.toString((double)(tempTotal + tempCurrentEntry)); break;
-                case "-": totalString = Double.toString((double)(tempTotal - tempCurrentEntry)); break;
-                case "*": totalString = Double.toString((double)(tempTotal * tempCurrentEntry)); break;
-                case "/": totalString = Double.toString((double)(tempTotal / tempCurrentEntry)); break; // I don't understand
+                case "+": totalString = Double.toString(tempTotal + tempCurrentEntry); break;
+                case "-": totalString = Double.toString(tempTotal - tempCurrentEntry); break;
+                case "*": totalString = Double.toString(tempTotal * tempCurrentEntry); break;
+                case "/": totalString = Double.toString(tempTotal / tempCurrentEntry); break; // I don't understand
             }
             text.setText(totalString);
             currentOperator = "";
-            currentEntry = "0";
-            pressedEnter = true;
+            currentEntry = "";
+            pressedEquals = true;
         } else if (buttonName.equals("+") || buttonName.equals("-") || buttonName.equals("*") || buttonName.equals("/")) {
             currentOperator = buttonName;
-            pressedEnter = false;
+            pressedEquals = false;
         } 
-        //TODO: doing something like 9, +, 3, =, 3, +, 3 doesn't work
     }
 
     public static void addEventListenerToButtons() {
@@ -126,10 +128,10 @@ public class calculator {
     }
  
     public static void main(String[] args) {
-        totalString = "0";
-        currentEntry = "0";
+        totalString = "";
+        currentEntry = "";
         currentOperator = "";
-        pressedEnter = true;
+        pressedEquals = true;
         buttons = new ArrayList<JButton>();
         text = new JLabel("0");
         createWindow();
